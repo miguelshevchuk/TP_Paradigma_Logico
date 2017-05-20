@@ -7,11 +7,11 @@ usuario(carlos, 3, true, _).
 usuario(ana, _, _, 30).
 usuario(maria, 2, _, 15).
 
-usuario(pedro, Ambientes, Jardin, MetrosPileta) :-
-  usuario(maria, Ambientes, Jardin, MetrosPileta).
+usuario(pedro, Ambientes, DeseaJardin, MetrosPileta) :-
+  usuario(maria, Ambientes, DeseaJardin, MetrosPileta).
 
-usuario(chameleon, Ambientes, Jardin, MetrosPileta) :-
-  usuario(Usuario, Ambientes, Jardin, MetrosPileta),
+usuario(chameleon, Ambientes, DeseaJardin, MetrosPileta) :-
+  usuario(Usuario, Ambientes, DeseaJardin, MetrosPileta),
   Usuario \= chameleon.
 
 mismaCantidadAmbientes(propiedad(Direccion1, Ambientes, TieneJardin1, MetrosPileta1, Precio1), propiedad(Direccion2, Ambientes, TieneJardin2, MetrosPileta2, Precio2)) :-
@@ -66,3 +66,15 @@ Direccion = 'Calle Falsa 123'.
 Direccion = 'Av. Moreno 708' ;
 false.
 */
+
+%Consulta propiedadCumpleCaracteristicas(propiedad('Av. Moreno 708', 7, true, 30, 2000), usuario(Usuario, Ambientes, TieneJardin, MetrosPileta)).
+%ERROR: Arguments are not sufficiently instantiated
+% ERROR: In:
+% ERROR:   [10] _18764=<0
+% ERROR:    [8] propiedadCumpleCaracteristicas(propiedad('Tinsmith Circle 1774',3,true,0,700),usuario(carlos,3,true,_18814)) at c:/users/win7/desktop/utn/pdep/paradigmalogico/tplogico.pl:26
+% ERROR:    [7] <user>
+% ERROR:
+% ERROR: Note: some frames are missing due to last-call optimization.
+% ERROR: Re-run your program in debug mode (:- debug.) to get more detail.
+
+% Entiendo que esto pasa por que algunos de los usuarios tienen "_" en algunos de sus deseos, pero no logro hacerlo funcionar

@@ -1,80 +1,149 @@
-propiedad('Tinsmith Circle 1774', 3, true, 0, 700).
-propiedad('Av. Moreno 708', 7, true, 30, 2000).
-propiedad('Av. Siempre Viva 742', 4, true, 0, 1000).
-propiedad('Calle Falsa 123', 3, false, 0, 200).
+persona(carlos).
+persona(ana).
+persona(maria).
+persona(pedro).
+persona(chameleon).
 
-usuario(carlos, 3, true, _).
-usuario(ana, _, _, 30).
-usuario(maria, 2, _, 15).
+propiedad('Tinsmith Circle 1774').
+propiedad('Av. Moreno 708').
+propiedad('Av. Siempre Viva 742').
+propiedad('Calle Falsa 123').
 
-usuario(pedro, Ambientes, DeseaJardin, MetrosPileta) :-
-  usuario(maria, Ambientes, DeseaJardin, MetrosPileta).
+tiene('Tinsmith Circle 1774', ambientes(3)).
+tiene('Tinsmith Circle 1774', jardin()).
+precio('Tinsmith Circle 1774', 700).
 
-usuario(chameleon, Ambientes, DeseaJardin, MetrosPileta) :-
-  usuario(Usuario, Ambientes, DeseaJardin, MetrosPileta),
-  Usuario \= chameleon.
+tiene('Av. Moreno 708', ambientes(7)).
+tiene('Av. Moreno 708', jardin()).
+tiene('Av. Moreno 708', piscina(30)).
+precio('Av. Moreno 708', 2000).
 
-mismaCantidadAmbientes(propiedad(Direccion1, Ambientes, TieneJardin1, MetrosPileta1, Precio1), propiedad(Direccion2, Ambientes, TieneJardin2, MetrosPileta2, Precio2)) :-
-  propiedad(Direccion1, Ambientes, TieneJardin1, MetrosPileta1, Precio1),
-  propiedad(Direccion2, Ambientes, TieneJardin2, MetrosPileta2, Precio2),
-  Direccion1 \= Direccion2.
+tiene('Av. Siempre Viva 742', ambientes(4)).
+tiene('Av. Siempre Viva 742', jardin()).
+precio('Av. Siempre Viva 742', 1000).
 
-propiedadCumpleCaracteristicas(propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio), usuario(Nombre, AmbientesDeseados, TieneJardin, MetrosPiletaDeseados)) :-
-  propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio),
-  usuario(Nombre, AmbientesDeseados, TieneJardin, MetrosPiletaDeseados),
-  cumpleCaracteristicaAmbientes(propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio), AmbientesDeseados),
-  cumpleCaracteristicaPileta(propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio), MetrosPiletaDeseados).
+tiene('Calle Falsa 123', ambientes(3)).
+precio('Calle Falsa 123', 2000).
 
-cumpleCaracteristicaAmbientes(propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio), AmbientesDeseados) :-
-  propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio),
-  AmbientesDeseados =< Ambientes.
+quiere(carlos, ambientes(3)).
+quiere(carlos, jardin()).
+quiere(ana, piscina(100)).
+quiere(maria, piscina(15)).
+quiere(maria, ambientes(2)).
 
-cumpleCaracteristicaPileta(propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio), MetrosPiletaDeseados) :-
-  propiedad(Direccion, Ambientes, TieneJardin, MetrosPileta, Precio),
-  MetrosPiletaDeseados =< MetrosPileta.
+quiere(pedro, Deseo) :-
+  quiere(maria, Deseo).
 
-%Consulta: propiedad(Direccion, _, _, 30, _).
-%Respuesta: Direccion = 'Av. Moreno 708'.
+quiere(chameleon, Deseo) :-
+  quiere(Alguien, Deseo),
+  Alguien \= chameleon.
 
-%Consulta: mismaCantidadAmbientes(propiedad(Direccion1, Ambientes, _, _, _), propiedad(Direccion2, Ambientes, _, _, _)).
-/*Respuesta:
-Direccion1 = 'Tinsmith Circle 1774',
-Ambientes = 3,
-Direccion2 = 'Calle Falsa 123' ;
-Direccion1 = 'Calle Falsa 123',
-Ambientes = 3,
-Direccion2 = 'Tinsmith Circle 1774' ;
-false.
-*/
+cumple(Propiedad, ambientes(AmbientesDeseados)) :-
+  tiene(Propiedad, ambientes(Cantidad)),
+  Cantidad >= AmbientesDeseados.
 
-%Consulta: usuario(pedro, Ambientes, Jardin, MetrosPileta).
-/*Respuesta:
-Ambientes = 2,
-MetrosPileta = 15.
-*/
+cumple(Propiedad, piscina(MetrosPiletaDeseados)) :-
+  tiene(Propiedad, piscina(MetrosPileta)),
+  MetrosPileta >= MetrosPiletaDeseados.
 
-%Consulta: cumpleCaracteristicaAmbientes(propiedad(Direccion, _, _, _, _), 2).
-/*Respuesta:
-Direccion = 'Tinsmith Circle 1774' ;
-Direccion = 'Av. Moreno 708' ;
-Direccion = 'Av. Siempre Viva 742' ;
-Direccion = 'Calle Falsa 123'.
-*/
+cumple(Propiedad, Caracteristica) :-
+  tiene(Propiedad, Caracteristica).
 
-%Consulta: propiedadCumpleCaracteristicas(propiedad(Direccion, _, _, _, _), usuario(pedro, 2, _, 15)).
-/*Respuesta:
-Direccion = 'Av. Moreno 708' ;
-false.
-*/
+propiedadCumpleCaracteristicas(Propiedad, Persona) :-
+  quiere(Persona, Deseo),
+  cumple(Propiedad, Deseo).
 
-%Consulta propiedadCumpleCaracteristicas(propiedad('Av. Moreno 708', 7, true, 30, 2000), usuario(Usuario, Ambientes, TieneJardin, MetrosPileta)).
-%ERROR: Arguments are not sufficiently instantiated
-% ERROR: In:
-% ERROR:   [10] _18764=<0
-% ERROR:    [8] propiedadCumpleCaracteristicas(propiedad('Tinsmith Circle 1774',3,true,0,700),usuario(carlos,3,true,_18814)) at c:/users/win7/desktop/utn/pdep/paradigmalogico/tplogico.pl:26
-% ERROR:    [7] <user>
-% ERROR:
-% ERROR: Note: some frames are missing due to last-call optimization.
-% ERROR: Re-run your program in debug mode (:- debug.) to get more detail.
+cumpleTodo(Propiedad, Persona) :-
+  persona(Persona),
+  propiedad(Propiedad),
+  forall(quiere(Persona,Deseo), cumple(Propiedad, Deseo)).
 
-% Entiendo que esto pasa por que algunos de los usuarios tienen "_" en algunos de sus deseos, pero no logro hacerlo funcionar
+%%%%%%%%%%%%%%%%    CONSULTAS    %%%%%%%%%%%%%%%%%
+%1)
+%?- tiene(Propiedad,piscina(30)).
+%Propiedad = 'Av. Moreno 708'.
+
+%2)
+% ?- tiene(Propiedad,ambientes(Cant)), tiene(Propiedad2, ambientes(Cant)).
+% Propiedad = Propiedad2, Propiedad2 = 'Tinsmith Circle 1774',
+% Cant = 3 ;
+% Propiedad = 'Tinsmith Circle 1774',
+% Cant = 3,
+% Propiedad2 = 'Calle Falsa 123' ;
+% Propiedad = Propiedad2, Propiedad2 = 'Av. Moreno 708',
+% Cant = 7 ;
+% Propiedad = Propiedad2, Propiedad2 = 'Av. Siempre Viva 742',
+% Cant = 4 ;
+% Propiedad = 'Calle Falsa 123',
+% Cant = 3,
+% Propiedad2 = 'Tinsmith Circle 1774' ;
+% Propiedad = Propiedad2, Propiedad2 = 'Calle Falsa 123',
+% Cant = 3.
+
+%3)
+% ?- quiere(pedro, Deseo).
+% Deseo = ambientes(2) ;
+% Deseo = piscina(15).
+
+%4)
+% ?- cumple(Propiedad, ambientes(2)).
+% Propiedad = 'Tinsmith Circle 1774' ;
+% Propiedad = 'Av. Moreno 708' ;
+% Propiedad = 'Av. Siempre Viva 742' ;
+% Propiedad = 'Calle Falsa 123' ;
+% false.
+
+%5)
+% ?- propiedadCumpleCaracteristicas(Propiedad,pedro).
+% Propiedad = 'Tinsmith Circle 1774' ;
+% Propiedad = 'Av. Moreno 708' ;
+% Propiedad = 'Av. Siempre Viva 742' ;
+% Propiedad = 'Calle Falsa 123' ;
+% false.
+
+%6)
+% ?- quiere(Persona, Deseo), cumple('Av. Moreno 708', Deseo).
+% Persona = carlos,
+% Deseo = ambientes(3) ;
+% Persona = carlos,
+% Deseo = jardin() ;
+% Persona = maria,
+% Deseo = piscina(15) ;
+% Persona = maria,
+% Deseo = ambientes(2) ;
+% Persona = pedro,
+% Deseo = piscina(15) ;
+% Persona = pedro,
+% Deseo = ambientes(2) ;
+% Persona = chameleon,
+% Deseo = ambientes(3) ;
+% Persona = chameleon,
+% Deseo = jardin() ;
+% Persona = chameleon,
+% Deseo = piscina(15) ;
+% Persona = chameleon,
+% Deseo = ambientes(2) ;
+% Persona = chameleon,
+% Deseo = piscina(15) ;
+% Persona = chameleon,
+% Deseo = ambientes(2) ;
+% ERROR: Out of local stack
+
+% 7)
+% ?- quiere(_,Deseo), not(cumple(_, Deseo)).
+% Deseo = piscina(100) ;
+% Deseo = piscina(100) ;
+
+%8)
+% ?- cumpleTodo(Propiedad,Persona).
+% Propiedad = 'Tinsmith Circle 1774',
+% Persona = carlos ;
+% Propiedad = 'Av. Moreno 708',
+% Persona = carlos ;
+% Propiedad = 'Av. Siempre Viva 742',
+% Persona = carlos ;
+% Propiedad = 'Av. Moreno 708',
+% Persona = maria ;
+% Propiedad = 'Av. Moreno 708',
+% Persona = pedro ;
+% false.

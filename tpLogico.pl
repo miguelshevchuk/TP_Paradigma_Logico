@@ -141,21 +141,14 @@ esPropiedadTop(Propiedad):-
 %Propiedad = 'Av. Moreno 708'.
 
 %2)
-% ?- tiene(Propiedad,ambientes(Cant)), tiene(Propiedad2, ambientes(Cant)).
-% Propiedad = Propiedad2, Propiedad2 = 'Tinsmith Circle 1774',
-% Cant = 3 ;
+% ?- tiene(Propiedad,ambientes(Cant)), tiene(Propiedad2, ambientes(Cant)),Propiedad \= Propiedad2.
 % Propiedad = 'Tinsmith Circle 1774',
 % Cant = 3,
 % Propiedad2 = 'Calle Falsa 123' ;
-% Propiedad = Propiedad2, Propiedad2 = 'Av. Moreno 708',
-% Cant = 7 ;
-% Propiedad = Propiedad2, Propiedad2 = 'Av. Siempre Viva 742',
-% Cant = 4 ;
 % Propiedad = 'Calle Falsa 123',
 % Cant = 3,
 % Propiedad2 = 'Tinsmith Circle 1774' ;
-% Propiedad = Propiedad2, Propiedad2 = 'Calle Falsa 123',
-% Cant = 3.
+% false.
 
 %3)
 % ?- quiere(pedro, Deseo).
